@@ -36,7 +36,7 @@ public class BirthDeathReportResident {
     @Embeddable
     @EqualsAndHashCode
     @NoArgsConstructor
-    @RequiredArgsConstructor
+    @AllArgsConstructor
     public class Pk implements Serializable {
         @Column(name = "birth_death_type_code", nullable = false)
         private String birthDeathTypeCode;

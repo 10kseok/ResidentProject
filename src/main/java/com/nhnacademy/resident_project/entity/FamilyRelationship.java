@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Table(name = "family_relationship")
 public class FamilyRelationship {
     @EmbeddedId
-    private PK pk;
+    private Pk pk;
     @MapsId("baseResidentSerialNumber")
     @ManyToOne
     @JoinColumn(name = "base_resident_serial_number")
@@ -24,8 +24,8 @@ public class FamilyRelationship {
     @Embeddable
     @EqualsAndHashCode
     @NoArgsConstructor
-    @RequiredArgsConstructor
-    public class PK implements Serializable {
+    @AllArgsConstructor
+    public class Pk implements Serializable {
         @Column(name = "family_resident_serial_number", nullable = false)
         private int familyResidentSerialNumber;
         @Column(name = "base_resident_serial_number", nullable = false)

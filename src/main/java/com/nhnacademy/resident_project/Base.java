@@ -1,2 +1,4 @@
-package com.nhnacademy.resident_project;public interface Base {
+package com.nhnacademy.resident_project;
+
+public interface Base {
 }

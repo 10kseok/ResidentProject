@@ -27,7 +27,7 @@ public class HouseholdMovementAddress {
     @Embeddable
     @EqualsAndHashCode
     @NoArgsConstructor
-    @RequiredArgsConstructor
+    @AllArgsConstructor
     public class Pk implements Serializable {
         @Column(name = "house_movement_report_date", nullable = false)
         private LocalDate houseMovementReportDate;

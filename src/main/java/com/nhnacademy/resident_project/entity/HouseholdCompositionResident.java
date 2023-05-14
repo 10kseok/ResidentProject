@@ -33,7 +33,7 @@ public class HouseholdCompositionResident {
     @Embeddable
     @EqualsAndHashCode
     @NoArgsConstructor
-    @RequiredArgsConstructor
+    @AllArgsConstructor
     public class Pk implements Serializable {
         @Column(name = "household_serial_number", nullable = false)
         private int householdSerialNumber;
