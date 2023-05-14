@@ -1,9 +1,7 @@
 package com.nhnacademy.resident_project.entity;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,8 +14,9 @@ import java.time.LocalDateTime;
 @Table(name = "resident")
 public class Resident {
     @Id
-    @Column(name = "resident_serial_number")
+    @Column(name = "resident_serial_number", nullable = false)
     private int residentSerialNumber;
+    @Column(nullable = false)
     private String name;
     @Column(name = "resident_registration_number", nullable = false)
     private String residentRegistrationNumber;

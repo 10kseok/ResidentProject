@@ -12,10 +12,10 @@ import java.io.Serializable;
 public class FamilyRelationship {
     @EmbeddedId
     private PK pk;
-    @MapsId("familyResidentSerialNumber")
+    @MapsId("baseResidentSerialNumber")
     @ManyToOne
-    @JoinColumn(name = "resident_serial_number")
-    private Resident residentSerialNumber;
+    @JoinColumn(name = "base_resident_serial_number")
+    private Resident baseResident;
     @Column(name = "family_relationship_code", nullable = false)
     private String familyRelationshipCode;
 
@@ -23,11 +23,12 @@ public class FamilyRelationship {
     @Setter
     @Embeddable
     @EqualsAndHashCode
+    @NoArgsConstructor
     @RequiredArgsConstructor
     public class PK implements Serializable {
-        @Column(name = "family_resident_serial_number")
+        @Column(name = "family_resident_serial_number", nullable = false)
         private int familyResidentSerialNumber;
-        @Column(name = "base_resident_serial_number")
+        @Column(name = "base_resident_serial_number", nullable = false)
         private int baseResidentSerialNumber;
     }
 }
