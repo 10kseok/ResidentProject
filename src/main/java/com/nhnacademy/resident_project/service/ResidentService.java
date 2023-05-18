@@ -3,6 +3,7 @@ package com.nhnacademy.resident_project.service;
 import com.nhnacademy.resident_project.domain.ResidentRequest;
 import com.nhnacademy.resident_project.entity.Resident;
 import com.nhnacademy.resident_project.exception.DuplicateSerialNumberException;
+import com.nhnacademy.resident_project.exception.ResidentNotFoundException;
 import com.nhnacademy.resident_project.repository.ResidentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,12 @@ public class ResidentService {
         return residentRequest.getResidentSerialNumber();
     }
 
-    public Optional<Resident> findResidentById(Integer serialNumber) {
-        return residentRepository.findById(serialNumber);
+    public Resident findResidentById(Integer serialNumber) {
+        Optional<Resident> resident = residentRepository.findById(serialNumber);
+        if (resident.isEmpty()) {
+            throw new ResidentNotFoundException();
+        }
+
+        return resident.get();
     }
 }

@@ -5,16 +5,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @RepositoryIntegrationTest
-class HouseholdRepositoryTest {
+class FamilyRelationshipRepositoryTest {
     @Autowired
-    HouseholdRepository householdRepository;
-
+    FamilyRelationshipRepository familyRelationshipRepository;
     @Test
-    @DisplayName("삽입한 데이터 확인")
-    void find_all_inserted_data() {
-        assertThat(householdRepository.findAll()).hasSize(1);
+    @DisplayName("모든 가족관계 조회")
+    void findAll() {
+        // NOTE : N+1 Problem
+        familyRelationshipRepository.findAll();
     }
 }

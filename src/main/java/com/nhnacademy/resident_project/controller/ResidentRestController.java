@@ -1,6 +1,8 @@
 package com.nhnacademy.resident_project.controller;
 
+import com.nhnacademy.resident_project.domain.FamilyRelationshipRequest;
 import com.nhnacademy.resident_project.domain.ResidentRequest;
+import com.nhnacademy.resident_project.entity.FamilyRelationship;
 import com.nhnacademy.resident_project.entity.Resident;
 import com.nhnacademy.resident_project.exception.ResidentNotFoundException;
 import com.nhnacademy.resident_project.exception.ValidationFailedException;
@@ -60,19 +62,20 @@ public class ResidentRestController {
     @GetMapping("/{serialNumber}")
     @ResponseStatus(HttpStatus.OK)
     public ResidentRequest getResidentBy(@PathVariable Integer serialNumber) {
-        Optional<Resident> resident = residentService.findResidentById(serialNumber);
-        return resident.map(ResidentRequest::from)
-                .orElseThrow(ResidentNotFoundException::new);
+        Resident resident = residentService.findResidentById(serialNumber);
+        return ResidentRequest.from(resident);
     }
 
     // 가족관계
     @PostMapping("/{serialNumber}/relationship")
-    ResponseEntity<Void> registerRelationship(@PathVariable Integer serialNumber) {
+    public Map<String, Object> registerRelationship(@PathVariable Integer serialNumber,
+                                                    @RequestBody FamilyRelationshipRequest familyRelationshipRequest) {
         // validation
+
         // post
         // residentService.save(resident);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .build();
+        FamilyRelationship familyRelationship = new FamilyRelationship();
+        return Map.of("", "");
     }
 
     @PutMapping("/{serialNumber}/relationship/{familySerialNumber}")

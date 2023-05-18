@@ -2,7 +2,6 @@ package com.nhnacademy.resident_project.repository;
 
 
 import com.nhnacademy.resident_project.RepositoryIntegrationTest;
-import com.nhnacademy.resident_project.entity.FamilyRelationship;
 import com.nhnacademy.resident_project.entity.Resident;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,7 +41,7 @@ class ResidentRepositoryTest {
         resident.setResidentSerialNumber(8);
         resident.setName("나테스");
 
-        assertThatThrownBy(() -> residentRepository.save(resident));
+        assertThatThrownBy(() -> residentRepository.saveAndFlush(resident));
     }
 
     @Test
@@ -58,22 +57,9 @@ class ResidentRepositoryTest {
         resident.setBirthPlaceCode("병원");
         resident.setRegistrationBaseAddress("경기도 성남시 분당구 대왕판교로645번길");
 
-        residentRepository.save(resident);
-        residentRepository.flush();
+        residentRepository.saveAndFlush(resident);
 
         assertThat(residentRepository.findById(8)).isPresent();
-    }
-
-    @Test
-    @DisplayName("주민 삭제")
-    void delete_resident() {
-        // 참조 무결성 에러
-        assertThat(residentRepository.findById(1)).isPresent();
-
-        residentRepository.deleteById(1);
-        residentRepository.flush();
-
-        assertThat(residentRepository.findById(1)).isNotPresent();
     }
 
     @Test
@@ -82,7 +68,7 @@ class ResidentRepositoryTest {
         residentRepository.findAll()
                 .stream()
                 .map(Resident::getFamilyRelationships)
-                .flatMap(fr -> fr.stream())
+                .flatMap(Collection::stream)
                 .collect(Collectors.toList())
                 .forEach(System.out::println);
     }

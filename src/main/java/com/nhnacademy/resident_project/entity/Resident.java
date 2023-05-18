@@ -1,8 +1,6 @@
 package com.nhnacademy.resident_project.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,6 +13,8 @@ import java.util.List;
 @Setter
 @Table(name = "resident")
 @NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class Resident implements Serializable {
     @Id
     @Column(name = "resident_serial_number", nullable = false)
@@ -39,5 +39,5 @@ public class Resident implements Serializable {
     private String deathPlaceAddress;
 
     @OneToMany(mappedBy = "baseResident")
-    private transient List<FamilyRelationship> familyRelationships;
+    private List<FamilyRelationship> familyRelationships;
 }

@@ -35,3 +35,5 @@ public class FamilyRelationship {
         private int baseResidentSerialNumber;
     }
 }
+
+
