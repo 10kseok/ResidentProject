@@ -1,2 +1,7 @@
-package com.nhnacademy.resident_project.service;public class HouseholdService {
+package com.nhnacademy.resident_project.service;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class HouseholdService {
 }

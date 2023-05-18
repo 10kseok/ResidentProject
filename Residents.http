@@ -1,0 +1,39 @@
+POST /residents HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "residentSerialNumber" : 8,
+  "name" : "독고필쌍",
+  "residentRegistrationNumber" : "970920-1234567",
+  "genderCode" : "여",
+  "birthDate" : "1997-09-14T07:22:00",
+  "birthPlaceCode" : "자택",
+  "registrationBaseAddress" : "경남 진주시 소호로119번길 20"
+}
+
+###
+
+PUT /residents/8 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+"residentSerialNumber" : 8,
+"name" : "독고필쌍에서두번째바꾼이름",
+"residentRegistrationNumber" : "970920-1234567",
+"genderCode" : "남",
+"birthDate" : "1997-09-14T07:22:00",
+"birthPlaceCode" : "자택",
+"registrationBaseAddress" : "경남 진주시 소호로119번길 20"
+}
+
+###
+
+GET /residents/8 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+###
+
+

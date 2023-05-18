@@ -4,6 +4,6 @@ import com.nhnacademy.resident_project.entity.FamilyRelationship;
 
 import java.util.List;
 
-public interface FamilyRelationShipOnly {
+public interface FamilyRelationShips {
     List<FamilyRelationship> getFamilyRelationships();
 }

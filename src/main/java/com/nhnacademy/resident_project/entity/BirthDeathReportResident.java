@@ -11,16 +11,17 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Table(name = "birth_death_report_resident")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BirthDeathReportResident {
     @EmbeddedId
-    private Pk pk;
+    private PK pk;
 
-    @MapsId("reportResidentSerialNumber")
     @ManyToOne
+    @MapsId("reportResidentSerialNumber")
     @JoinColumn(name = "report_resident_serial_number")
     private Resident reportResident;
 
-    @Column(name = "birth_death_repost_date", nullable = false)
+    @Column(name = "birth_death_report_date", nullable = false)
     private LocalDate birthDeathReportDate;
     @Column(name = "birth_report_qualifications_code")
     private String birthReportQualificationsCode;
@@ -35,14 +36,12 @@ public class BirthDeathReportResident {
     @Setter
     @Embeddable
     @EqualsAndHashCode
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public class Pk implements Serializable {
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class PK implements Serializable {
         @Column(name = "birth_death_type_code", nullable = false)
         private String birthDeathTypeCode;
         @Column(name = "resident_serial_number", nullable = false)
         private int residentSerialNumber;
-        @Column(name = "report_resident_serial_number", nullable = false)
         private int reportResidentSerialNumber;
     }
 }

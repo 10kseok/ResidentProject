@@ -1,18 +1,21 @@
 package com.nhnacademy.resident_project.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "resident")
-public class Resident {
+@NoArgsConstructor
+public class Resident implements Serializable {
     @Id
     @Column(name = "resident_serial_number", nullable = false)
     private int residentSerialNumber;
@@ -34,4 +37,7 @@ public class Resident {
     private String deathPlaceCode;
     @Column(name = "death_place_address")
     private String deathPlaceAddress;
+
+    @OneToMany(mappedBy = "baseResident")
+    private transient List<FamilyRelationship> familyRelationships;
 }

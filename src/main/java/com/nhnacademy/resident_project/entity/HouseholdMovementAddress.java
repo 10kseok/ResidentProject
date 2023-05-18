@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Table(name = "household_movement_address")
 public class HouseholdMovementAddress {
     @EmbeddedId
-    private Pk pk;
+    private PK pk;
     @MapsId("householdSerialNumber")
     @ManyToOne
     @JoinColumn(name = "household_serial_number")
@@ -26,13 +26,12 @@ public class HouseholdMovementAddress {
     @Setter
     @Embeddable
     @EqualsAndHashCode
-    @NoArgsConstructor
     @AllArgsConstructor
-    public class Pk implements Serializable {
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class PK implements Serializable {
         @Column(name = "house_movement_report_date", nullable = false)
         private LocalDate houseMovementReportDate;
 
-        @Column(name = "household_serial_number", nullable = false)
         private int householdSerialNumber;
     }
 }
