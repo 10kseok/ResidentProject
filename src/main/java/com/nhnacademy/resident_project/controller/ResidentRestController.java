@@ -4,6 +4,7 @@ import com.nhnacademy.resident_project.domain.FamilyRelationshipRequest;
 import com.nhnacademy.resident_project.domain.ResidentRequest;
 import com.nhnacademy.resident_project.entity.FamilyRelationship;
 import com.nhnacademy.resident_project.entity.Resident;
+import com.nhnacademy.resident_project.exception.IllegalResidentAccessException;
 import com.nhnacademy.resident_project.exception.ValidationFailedException;
 import com.nhnacademy.resident_project.service.ResidentService;
 import lombok.RequiredArgsConstructor;
@@ -41,14 +42,14 @@ public class ResidentRestController {
     @PutMapping("/{serialNumber}")
     @ResponseStatus(HttpStatus.OK)
     public Map<String, Integer> update(@PathVariable Integer serialNumber, @Valid @RequestBody ResidentRequest residentRequest,
-                                       BindingResult bindingResult) throws IllegalAccessException {
+                                       BindingResult bindingResult) {
         // validation
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }
 
         if (serialNumber != residentRequest.getResidentSerialNumber()) {
-            throw new IllegalAccessException("주민일련번호가 일치하지 않습니다.");
+            throw new IllegalResidentAccessException();
         }
         // update
         residentService.update(residentRequest);

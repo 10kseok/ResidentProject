@@ -36,7 +36,6 @@ public class ResidentService {
         if (resident.isEmpty()) {
             throw new ResidentNotFoundException();
         }
-
         return resident.get();
     }
 }

@@ -3,30 +3,33 @@ package com.nhnacademy.resident_project.domain;
 import com.nhnacademy.resident_project.entity.Resident;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class ResidentRequest {
-    @NonNull
+    @NotNull @NonNull
     private int residentSerialNumber;
-    @NonNull
+    @NotNull @NonNull
     @Pattern(regexp = "[a-zA-Z가-힣]+")
     private String name;
-    @NonNull
+    @NotNull @NonNull
     private String residentRegistrationNumber;
-    @NonNull
-    @Pattern(regexp = "남|여")
+    @NotNull @NonNull
+    @Pattern(regexp = "[남여]")
     private String genderCode;
     @Past
-    @NonNull
+    @NotNull @NonNull
     private LocalDateTime birthDate;
-    @NonNull
+    @NotNull @NonNull
     private String birthPlaceCode;
-    @NonNull
+    @NotNull @NonNull
     private String registrationBaseAddress;
     private LocalDateTime deathDate;
     private String deathPlaceCode;
