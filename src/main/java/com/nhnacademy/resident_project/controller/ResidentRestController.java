@@ -4,7 +4,6 @@ import com.nhnacademy.resident_project.domain.FamilyRelationshipRequest;
 import com.nhnacademy.resident_project.domain.ResidentRequest;
 import com.nhnacademy.resident_project.entity.FamilyRelationship;
 import com.nhnacademy.resident_project.entity.Resident;
-import com.nhnacademy.resident_project.exception.ResidentNotFoundException;
 import com.nhnacademy.resident_project.exception.ValidationFailedException;
 import com.nhnacademy.resident_project.service.ResidentService;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -74,12 +71,12 @@ public class ResidentRestController {
 
         // post
         // residentService.save(resident);
-        FamilyRelationship familyRelationship = new FamilyRelationship();
+//        FamilyRelationship familyRelationship = new FamilyRelationship();
         return Map.of("", "");
     }
 
     @PutMapping("/{serialNumber}/relationship/{familySerialNumber}")
-    ResponseEntity<Void> update(@PathVariable Integer serialNumber,
+    public ResponseEntity<Void> update(@PathVariable Integer serialNumber,
                                 @PathVariable Integer familySerialNumber) {
         // validation
 
@@ -90,7 +87,7 @@ public class ResidentRestController {
     }
 
     @DeleteMapping("/{serialNumber}/relationship/{familySerialNumber}")
-    ResponseEntity<Void> delete(@PathVariable Integer serialNumber,
+    public ResponseEntity<Void> delete(@PathVariable Integer serialNumber,
                                 @PathVariable Integer familySerialNumber) {
         // validation
 
@@ -102,7 +99,7 @@ public class ResidentRestController {
 
     // 출생 신고
     @PostMapping("/{serialNumber}/birth")
-    ResponseEntity<Void> registerBirth(@PathVariable Integer serialNumber) {
+    public ResponseEntity<Void> registerBirth(@PathVariable Integer serialNumber) {
         // validation
 
         // post
@@ -112,7 +109,7 @@ public class ResidentRestController {
     }
 
     @PutMapping("/{serialNumber}/birth/{targetSerialNumber}")
-    ResponseEntity<Void> updateBirthReport(@PathVariable Integer serialNumber,
+    public ResponseEntity<Void> updateBirthReport(@PathVariable Integer serialNumber,
                                            @PathVariable Integer targetSerialNumber) {
         // validation
 
@@ -123,7 +120,7 @@ public class ResidentRestController {
     }
 
     @DeleteMapping("/{serialNumber}/birth/{targetSerialNumber}")
-    ResponseEntity<Void> deleteBirthReport(@PathVariable Integer serialNumber,
+    public ResponseEntity<Void> deleteBirthReport(@PathVariable Integer serialNumber,
                                            @PathVariable Integer targetSerialNumber) {
         // validation
 
@@ -135,7 +132,7 @@ public class ResidentRestController {
 
     // 사망 신고
     @PostMapping("/{serialNumber}/death")
-    ResponseEntity<Void> registerDeath(@PathVariable Integer serialNumber) {
+    public ResponseEntity<Void> registerDeath(@PathVariable Integer serialNumber) {
         // validation
 
         // post
@@ -145,7 +142,7 @@ public class ResidentRestController {
     }
 
     @PutMapping("/{serialNumber}/death/{targetSerialNumber}")
-    ResponseEntity<Void> updateDeathReport(@PathVariable Integer serialNumber,
+    public ResponseEntity<Void> updateDeathReport(@PathVariable Integer serialNumber,
                                            @PathVariable Integer targetSerialNumber) {
         // validation
 
@@ -156,7 +153,7 @@ public class ResidentRestController {
     }
 
     @DeleteMapping("/{serialNumber}/death/{targetSerialNumber}")
-    ResponseEntity<Void> deleteDeathReport(@PathVariable Integer serialNumber,
+    public ResponseEntity<Void> deleteDeathReport(@PathVariable Integer serialNumber,
                                            @PathVariable Integer targetSerialNumber) {
         // validation
 

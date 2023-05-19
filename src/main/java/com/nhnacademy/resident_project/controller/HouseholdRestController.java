@@ -18,7 +18,7 @@ public class HouseholdRestController {
     private final HouseholdService householdService;
 
     @PostMapping
-    ResponseEntity<Void> register(Household household) {
+    public ResponseEntity<Void> register(Household household) {
         // validation
 
         // save
@@ -28,7 +28,7 @@ public class HouseholdRestController {
     }
 
     @DeleteMapping("/{householdSerialNumber}")
-    ResponseEntity<Void> register(@PathVariable Integer householdSerialNumber) {
+    public ResponseEntity<Void> register(@PathVariable Integer householdSerialNumber) {
         // validation
 
         // save
@@ -39,7 +39,7 @@ public class HouseholdRestController {
 
     // 세대 전입 주소
     @PostMapping("/{householdSerialNumber}/movement")
-    ResponseEntity<Void> registerMovement(@PathVariable Integer householdSerialNumber) {
+    public ResponseEntity<Void> registerMovement(@PathVariable Integer householdSerialNumber) {
         // validation
 
         // post
@@ -49,7 +49,7 @@ public class HouseholdRestController {
     }
 
     @PutMapping("/{householdSerialNumber}/movement/{reportDate}")
-    ResponseEntity<Void> updateMovement(@PathVariable Integer householdSerialNumber,
+    public ResponseEntity<Void> updateMovement(@PathVariable Integer householdSerialNumber,
                                         @PathVariable @DateTimeFormat(pattern = "YYYYMMDD") LocalDate reportDate) {
         // validation
 
@@ -60,7 +60,7 @@ public class HouseholdRestController {
     }
 
     @DeleteMapping("/{householdSerialNumber}/movement/{reportDate}}")
-    ResponseEntity<Void> deleteMovement(@PathVariable Integer householdSerialNumber,
+    public ResponseEntity<Void> deleteMovement(@PathVariable Integer householdSerialNumber,
                                         @PathVariable @DateTimeFormat(pattern = "YYYYMMDD") LocalDate reportDate) {
         // validation
 
