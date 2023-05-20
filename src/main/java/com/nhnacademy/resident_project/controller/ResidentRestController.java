@@ -1,10 +1,11 @@
 package com.nhnacademy.resident_project.controller;
 
-import com.nhnacademy.resident_project.domain.FamilyRelationshipRequest;
-import com.nhnacademy.resident_project.domain.ResidentRequest;
-import com.nhnacademy.resident_project.entity.FamilyRelationship;
+import com.nhnacademy.resident_project.domain.Relationship;
+import com.nhnacademy.resident_project.domain.request.FamilyRelationshipRequest;
+import com.nhnacademy.resident_project.domain.request.ResidentRequest;
 import com.nhnacademy.resident_project.entity.Resident;
 import com.nhnacademy.resident_project.exception.IllegalResidentAccessException;
+import com.nhnacademy.resident_project.exception.NoSuchRelationshipException;
 import com.nhnacademy.resident_project.exception.ValidationFailedException;
 import com.nhnacademy.resident_project.service.ResidentService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Slf4j
@@ -22,20 +24,16 @@ import java.util.Map;
 @RequestMapping("/residents")
 @RequiredArgsConstructor
 public class ResidentRestController {
-    // TODO: Exception 처리 Advice 필요
     private final ResidentService residentService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Map<String, Integer> register(@Valid @RequestBody ResidentRequest residentRequest,
                                          BindingResult bindingResult) {
-        // validation
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }
-        // save
         int serialNumber = residentService.save(residentRequest);
-
         return Map.of("residentSerialNumber", serialNumber);
     }
 
@@ -43,17 +41,13 @@ public class ResidentRestController {
     @ResponseStatus(HttpStatus.OK)
     public Map<String, Integer> update(@PathVariable Integer serialNumber, @Valid @RequestBody ResidentRequest residentRequest,
                                        BindingResult bindingResult) {
-        // validation
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }
-
         if (serialNumber != residentRequest.getResidentSerialNumber()) {
             throw new IllegalResidentAccessException();
         }
-        // update
         residentService.update(residentRequest);
-
         return Map.of("residentSerialNumber", serialNumber);
     }
 
@@ -66,36 +60,58 @@ public class ResidentRestController {
 
     // 가족관계
     @PostMapping("/{serialNumber}/relationship")
-    public Map<String, Object> registerRelationship(@PathVariable Integer serialNumber,
-                                                    @RequestBody FamilyRelationshipRequest familyRelationshipRequest) {
-        // validation
+    @ResponseStatus(HttpStatus.CREATED)
+    public Map<String, LocalDateTime> registerRelationship(@PathVariable("serialNumber") Integer baseSerialNumber,
+                                                           @Valid @RequestBody FamilyRelationshipRequest request,
+                                                           BindingResult bindingResult) {
+        if (bindingResult.hasErrors() || baseSerialNumber <= 0
+                || baseSerialNumber == request.getFamilyResidentSerialNumber()) {
+            throw new ValidationFailedException(bindingResult);
+        }
+        if (!Relationship.matches(request.getFamilyRelationshipCode())) {
+            throw new NoSuchRelationshipException();
+        }
 
-        // post
-        // residentService.save(resident);
-//        FamilyRelationship familyRelationship = new FamilyRelationship();
-        return Map.of("", "");
+        request.setBaseResidentSerialNumber(baseSerialNumber);
+        residentService.save(request);
+
+        return Map.of("createdAt", LocalDateTime.now());
     }
 
     @PutMapping("/{serialNumber}/relationship/{familySerialNumber}")
-    public ResponseEntity<Void> update(@PathVariable Integer serialNumber,
-                                @PathVariable Integer familySerialNumber) {
-        // validation
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, LocalDateTime> update(@PathVariable("serialNumber") Integer baseSerialNumber,
+                                       @PathVariable Integer familySerialNumber,
+                                       @Valid @RequestBody FamilyRelationshipRequest request,
+                                             BindingResult bindingResult
+    ) {
+        if (bindingResult.hasErrors() || baseSerialNumber <= 0
+                || baseSerialNumber == request.getFamilyResidentSerialNumber()) {
+            throw new ValidationFailedException(bindingResult);
+        }
+        if (!Relationship.matches(request.getFamilyRelationshipCode())) {
+            throw new NoSuchRelationshipException();
+        }
 
-        // update
-        // residentService.update(resident);
-        return ResponseEntity.ok()
-                .build();
+        request.setBaseResidentSerialNumber(baseSerialNumber);
+        request.setFamilyResidentSerialNumber(familySerialNumber);
+        residentService.save(request);
+
+        return Map.of("changedAt", LocalDateTime.now());
     }
 
     @DeleteMapping("/{serialNumber}/relationship/{familySerialNumber}")
-    public ResponseEntity<Void> delete(@PathVariable Integer serialNumber,
-                                @PathVariable Integer familySerialNumber) {
-        // validation
-
-        // delete
-        // residentService.delete(resident);
-        return ResponseEntity.ok()
-                .build();
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, LocalDateTime> delete(@PathVariable("serialNumber") Integer baseSerialNumber,
+                                             @PathVariable Integer familySerialNumber) {
+        if (baseSerialNumber <= 0 || familySerialNumber <= 0) {
+            throw new IllegalResidentAccessException();
+        }
+        FamilyRelationshipRequest request = new FamilyRelationshipRequest();
+        request.setBaseResidentSerialNumber(baseSerialNumber);
+        request.setFamilyResidentSerialNumber(familySerialNumber);
+        residentService.delete(request);
+        return Map.of("deletedAt", LocalDateTime.now());
     }
 
     // 출생 신고

@@ -21,6 +21,16 @@
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.language>java</sonar.language>
+        <sonar.test.exclusions>
+            **/resources/**,
+            src/main/java/com/nhnacademy/resident_project/WebAppInitializer.java,
+            src/main/java/com/nhnacademy/resident_project/advice/CommonRestControllerAdvice.java
+        </sonar.test.exclusions>
+        <sonar.exclusions>
+            **/resources/**,
+            src/main/java/com/nhnacademy/resident_project/WebAppInitializer.java,
+            src/main/java/com/nhnacademy/resident_project/advice/CommonRestControllerAdvice.java
+        </sonar.exclusions>
     </properties>
 
     <dependencyManagement>
@@ -59,6 +69,12 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.4.2</version>
             <scope>test</scope>
         </dependency>
 

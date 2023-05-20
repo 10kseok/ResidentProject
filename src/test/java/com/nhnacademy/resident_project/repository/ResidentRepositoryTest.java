@@ -67,7 +67,7 @@ class ResidentRepositoryTest {
     void find_family_relation() {
         residentRepository.findAll()
                 .stream()
-                .map(Resident::getFamilyRelationships)
+                .map(Resident::getBaseRelationships)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList())
                 .forEach(System.out::println);

@@ -1,13 +1,8 @@
-package com.nhnacademy.todo.exception;
+package com.nhnacademy.resident_project.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
-
-/**
- * @Author : marco@nhnedu.com
- * @Date : 24/11/2022
- */
 public class ErrorMessage {
 
     private int statusCode;

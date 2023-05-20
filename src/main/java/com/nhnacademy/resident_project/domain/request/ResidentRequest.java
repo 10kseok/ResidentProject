@@ -1,4 +1,4 @@
-package com.nhnacademy.resident_project.domain;
+package com.nhnacademy.resident_project.domain.request;
 
 import com.nhnacademy.resident_project.entity.Resident;
 import lombok.*;
@@ -35,7 +35,7 @@ public class ResidentRequest {
     private String deathPlaceCode;
     private String deathPlaceAddress;
 
-    public Resident toResident() {
+    public Resident toEntity() {
         Resident resident = new Resident();
 
         resident.setResidentSerialNumber(getResidentSerialNumber());

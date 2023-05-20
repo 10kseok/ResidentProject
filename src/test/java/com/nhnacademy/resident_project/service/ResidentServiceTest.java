@@ -1,9 +1,13 @@
 package com.nhnacademy.resident_project.service;
 
-import com.nhnacademy.resident_project.domain.ResidentRequest;
+import com.nhnacademy.resident_project.domain.FamilyRelationShips;
+import com.nhnacademy.resident_project.domain.request.FamilyRelationshipRequest;
+import com.nhnacademy.resident_project.domain.request.ResidentRequest;
+import com.nhnacademy.resident_project.entity.FamilyRelationship;
 import com.nhnacademy.resident_project.entity.Resident;
 import com.nhnacademy.resident_project.exception.DuplicateSerialNumberException;
 import com.nhnacademy.resident_project.exception.ResidentNotFoundException;
+import com.nhnacademy.resident_project.repository.FamilyRelationshipRepository;
 import com.nhnacademy.resident_project.repository.ResidentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,10 +28,12 @@ import static org.mockito.Mockito.*;
 class ResidentServiceTest {
     @Mock
     ResidentRepository residentRepository;
+    @Mock
+    FamilyRelationshipRepository familyRelationshipRepository;
     @InjectMocks
     ResidentService residentService;
 
-    Resident testResident;
+    ResidentRequest testResidentRequest;
 
     @BeforeEach
     void init() {
@@ -43,52 +49,81 @@ class ResidentServiceTest {
         resident.setDeathPlaceCode("주택");
         resident.setDeathPlaceAddress("강원도 고성군 금강산로 290번길");
 
-        testResident = resident;
+        testResidentRequest = ResidentRequest.from(resident);
     }
 
     @Test
-    @DisplayName("이미있는 일련번호로 주민 등록")
+    @DisplayName("주민 등록 - 이미 있는 일련번호로 등록하는 경우")
     void save_1() {
         // given
 
         // when
-        doReturn(testResident).when(residentRepository).saveAndFlush(testResident);
-        verify(residentRepository, atMostOnce()).saveAndFlush(testResident);
+        doReturn(testResidentRequest.toEntity()).when(residentRepository).saveAndFlush(testResidentRequest.toEntity());
+        verify(residentRepository, atMostOnce()).saveAndFlush(testResidentRequest.toEntity());
 
         // then
-        assertThat(residentService.save(ResidentRequest.from(testResident))).isEqualTo(testResident.getResidentSerialNumber());
-        when(residentRepository.existsById(testResident.getResidentSerialNumber())).thenReturn(true);
+        assertThat(residentService.save(testResidentRequest)).isEqualTo(testResidentRequest.getResidentSerialNumber());
+        when(residentRepository.existsById(testResidentRequest.getResidentSerialNumber())).thenReturn(true);
 
-        assertThatThrownBy(() -> residentService.save(ResidentRequest.from(testResident)))
+        assertThatThrownBy(() -> residentService.save(testResidentRequest))
                 .isInstanceOf(DuplicateSerialNumberException.class);
     }
     @Test
-    @DisplayName("주민 등록")
+    @DisplayName("주민 등록 - 성공")
     void save_2() {
         // given
 
         // when
-        doReturn(testResident).when(residentRepository).saveAndFlush(testResident);
-        verify(residentRepository, atMostOnce()).saveAndFlush(testResident);
-        when(residentRepository.findById(testResident.getResidentSerialNumber())).thenReturn(Optional.of(testResident));
+        doReturn(testResidentRequest.toEntity()).when(residentRepository).saveAndFlush(testResidentRequest.toEntity());
+        verify(residentRepository, atMostOnce()).saveAndFlush(testResidentRequest.toEntity());
+        when(residentRepository.findById(testResidentRequest.getResidentSerialNumber())).thenReturn(Optional.of(testResidentRequest.toEntity()));
 
         // then
-        assertThat(residentService.save(ResidentRequest.from(testResident))).isEqualTo(testResident.getResidentSerialNumber());
-        assertThat(residentService.findResidentById(testResident.getResidentSerialNumber())).isEqualTo(testResident);
+        assertThat(residentService.save(testResidentRequest)).isEqualTo(testResidentRequest.getResidentSerialNumber());
+        assertThat(residentService.findResidentById(testResidentRequest.getResidentSerialNumber())).isEqualTo(testResidentRequest.toEntity());
     }
+
+    @Test
+    @DisplayName("가족 관계 등록 - 없는 주민일련번호 등록")
+    void save_3() {
+        // given
+        FamilyRelationshipRequest req = new FamilyRelationshipRequest(1, 9999, "father");
+        when(residentRepository.findById(any())).thenReturn(Optional.empty());
+
+        // when, then
+        assertThatThrownBy(() -> residentService.save(req))
+                .isInstanceOf(ResidentNotFoundException.class);
+
+    }
+
+    @Test
+    @DisplayName("가족 관계 등록 - 정상 등록")
+    void save_4() {
+        // given
+        FamilyRelationshipRequest req = new FamilyRelationshipRequest(1, 2, "father");
+        when(residentRepository.findById(any())).thenReturn(any());
+
+        // when
+        boolean result = residentService.save(req);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
     @Test
     @DisplayName("주민정보 수정")
     void update_1() {
-        when(residentRepository.saveAndFlush(testResident))
-                .thenReturn(testResident);
-        when(residentRepository.findById(testResident.getResidentSerialNumber()))
-                .thenReturn(Optional.of(testResident));
-
-        Resident newResident = testResident;
+        // given
+        ResidentRequest newResident = testResidentRequest;
         newResident.setName("test");
-
-        assertThat(residentService.update(ResidentRequest.from(newResident)))
+        doReturn(testResidentRequest.toEntity())
+                .when(residentRepository).saveAndFlush(testResidentRequest.toEntity());
+        doReturn(Optional.of(testResidentRequest.toEntity()))
+                .when(residentRepository).findById(testResidentRequest.toEntity().getResidentSerialNumber());
+        // when
+        assertThat(residentService.update(newResident))
                 .isEqualTo(newResident.getResidentSerialNumber());
+        // then
         assertThat(residentService.findResidentById(newResident.getResidentSerialNumber()).getName())
                 .isEqualTo("test");
     }
@@ -105,9 +140,23 @@ class ResidentServiceTest {
     @Test
     @DisplayName("Id 기준으로 주민 조회")
     void find_by_id_2() {
-        when(residentRepository.findById(testResident.getResidentSerialNumber()))
-            .thenReturn(Optional.of(testResident));
+        when(residentRepository.findById(testResidentRequest.getResidentSerialNumber()))
+            .thenReturn(Optional.of(testResidentRequest.toEntity()));
 
-        assertThat(residentService.findResidentById(1)).isEqualTo(testResident);
+        assertThat(residentService.findResidentById(1)).isEqualTo(testResidentRequest.toEntity());
     }
+
+    @Test
+    @DisplayName("가족 관계 삭제 - 성공")
+    void delete_1() {
+        // given
+        FamilyRelationshipRequest request = new FamilyRelationshipRequest(1, 2, "child");
+
+        // when
+        boolean result = residentService.delete(request);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
 }

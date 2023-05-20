@@ -14,13 +14,13 @@ public class FamilyRelationship {
     @EmbeddedId
     private PK pk;
 
-    @ManyToOne
     @MapsId("familyResidentSerialNumber")
-    @JoinColumn(name = "family_resident_serial_number")
-    private Resident familyResident;
     @ManyToOne
+    @JoinColumn(name = "family_resident_serial_number", nullable = false)
+    private Resident familyResident;
     @MapsId("baseResidentSerialNumber")
-    @JoinColumn(name = "base_resident_serial_number")
+    @ManyToOne
+    @JoinColumn(name = "base_resident_serial_number", nullable = false)
     private Resident baseResident;
 
     @Column(name = "family_relationship_code")

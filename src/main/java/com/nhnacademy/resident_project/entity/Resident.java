@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -14,7 +15,6 @@ import java.util.List;
 @Table(name = "resident")
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 public class Resident implements Serializable {
     @Id
     @Column(name = "resident_serial_number", nullable = false)
@@ -38,6 +38,21 @@ public class Resident implements Serializable {
     @Column(name = "death_place_address")
     private String deathPlaceAddress;
 
-    @OneToMany(mappedBy = "baseResident")
-    private List<FamilyRelationship> familyRelationships;
+    @OneToMany(mappedBy = "baseResident", cascade = CascadeType.REMOVE)
+    private List<FamilyRelationship> baseRelationships = new ArrayList<>();
+    @OneToMany(mappedBy = "familyResident", cascade = CascadeType.REMOVE)
+    private List<FamilyRelationship> familyRelationships = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Resident)) return false;
+        Resident resident = (Resident) o;
+        return residentSerialNumber == resident.residentSerialNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(residentSerialNumber);
+    }
 }
