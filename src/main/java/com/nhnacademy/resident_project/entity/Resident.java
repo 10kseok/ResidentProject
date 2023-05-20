@@ -1,9 +1,11 @@
 package com.nhnacademy.resident_project.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.Objects;
 @Table(name = "resident")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Resident implements Serializable {
+public class Resident {
     @Id
     @Column(name = "resident_serial_number", nullable = false)
     private int residentSerialNumber;

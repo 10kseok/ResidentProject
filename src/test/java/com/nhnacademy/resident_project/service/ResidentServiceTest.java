@@ -1,9 +1,7 @@
 package com.nhnacademy.resident_project.service;
 
-import com.nhnacademy.resident_project.domain.FamilyRelationShips;
 import com.nhnacademy.resident_project.domain.request.FamilyRelationshipRequest;
 import com.nhnacademy.resident_project.domain.request.ResidentRequest;
-import com.nhnacademy.resident_project.entity.FamilyRelationship;
 import com.nhnacademy.resident_project.entity.Resident;
 import com.nhnacademy.resident_project.exception.DuplicateSerialNumberException;
 import com.nhnacademy.resident_project.exception.ResidentNotFoundException;
@@ -101,7 +99,12 @@ class ResidentServiceTest {
     void save_4() {
         // given
         FamilyRelationshipRequest req = new FamilyRelationshipRequest(1, 2, "father");
-        when(residentRepository.findById(any())).thenReturn(any());
+        Resident base = new Resident();
+        Resident family = new Resident();
+        family.setResidentSerialNumber(1);
+        base.setResidentSerialNumber(2);
+        when(residentRepository.findById(1)).thenReturn(Optional.of(family));
+        when(residentRepository.findById(2)).thenReturn(Optional.of(base));
 
         // when
         boolean result = residentService.save(req);

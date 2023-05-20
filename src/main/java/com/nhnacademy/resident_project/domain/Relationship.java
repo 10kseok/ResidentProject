@@ -6,7 +6,7 @@ public enum Relationship {
     SPOUSE("배우자"),
     CHILD("자식");
 
-    final private String korName;
+    private final String korName;
     Relationship(String name) {
         this.korName = name;
     }
