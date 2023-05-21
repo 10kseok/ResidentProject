@@ -1,9 +1,9 @@
 package com.nhnacademy.resident_project.service;
 
 import com.nhnacademy.resident_project.domain.request.BirthDeathReportRequest;
-import com.nhnacademy.resident_project.domain.request.CertificateIssueRequest;
 import com.nhnacademy.resident_project.domain.request.FamilyRelationshipRequest;
 import com.nhnacademy.resident_project.domain.request.ResidentRequest;
+import com.nhnacademy.resident_project.entity.CertificateIssue;
 import com.nhnacademy.resident_project.entity.FamilyRelationship;
 import com.nhnacademy.resident_project.entity.Resident;
 import com.nhnacademy.resident_project.exception.DuplicateSerialNumberException;
@@ -13,6 +13,8 @@ import com.nhnacademy.resident_project.repository.FamilyRelationshipRepository;
 import com.nhnacademy.resident_project.repository.ResidentRepository;
 import com.nhnacademy.resident_project.util.RandomLongGenerator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,10 @@ import java.util.Optional;
 public class ResidentService {
     private final ResidentRepository residentRepository;
     private final FamilyRelationshipRepository familyRelationshipRepository;
+
+    public Page<Resident> getResidentsBy(Pageable pageable) {
+        return residentRepository.getResidentsBy(pageable);
+    }
 
     // 주민
     public int save(ResidentRequest residentRequest) {
@@ -135,5 +141,9 @@ public class ResidentService {
                 request.getResidentSerialNumber(),
                 request.getReportResidentSerialNumber());
         return true;
+    }
+
+    public Page<CertificateIssue> getCertificationsByResidentNumber(int residentSerialNumber, Pageable pageable) {
+        return residentRepository.getCertificationsByResidentNumber(residentSerialNumber, pageable);
     }
 }

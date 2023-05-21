@@ -1,5 +1,6 @@
 package com.nhnacademy.resident_project.controller;
 
+import com.nhnacademy.resident_project.domain.request.HouseholdRequest;
 import com.nhnacademy.resident_project.entity.Household;
 import com.nhnacademy.resident_project.service.HouseholdService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class HouseholdRestController {
     private final HouseholdService householdService;
 
     @PostMapping
-    public ResponseEntity<Void> register(Household household) {
+    public ResponseEntity<Void> register(HouseholdRequest household) {
         // validation
 
         // save

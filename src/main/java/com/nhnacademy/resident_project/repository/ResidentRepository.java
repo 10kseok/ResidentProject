@@ -15,6 +15,11 @@ import java.util.Optional;
 
 public interface ResidentRepository extends JpaRepository<Resident, Integer> {
     Page<Resident> getResidentsBy(Pageable pageable);
+    @Query("select ci " +
+            "FROM CertificateIssue ci " +
+            "WHERE ci.issuedResident.residentSerialNumber = ?1 " +
+            "ORDER BY ci.certificateConfirmationNumber ")
+    Page<CertificateIssue> getCertificationsByResidentNumber(int serialNumber, Pageable pageable);
 
     @Query("SELECT ci FROM CertificateIssue ci WHERE ci.issuedResident.residentSerialNumber = ?1")
     List<CertificateIssue> findCertificateByResidentId(int number);

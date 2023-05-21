@@ -11,7 +11,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
@@ -45,7 +44,7 @@ public class WebConfig implements WebMvcConfigurer, ApplicationContextAware {
 
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.removeIf(o -> o instanceof MappingJackson2HttpMessageConverter);
+        converters.removeIf(MappingJackson2HttpMessageConverter.class::isInstance);
         HttpMessageConverter converter =  new MappingJackson2HttpMessageConverter(objectMapper());
         converters.add(converter);
     }

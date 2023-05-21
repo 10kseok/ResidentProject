@@ -1,10 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Main</title>
+    <script type="text/javascript">
+        window.addEventListener('DOMContentLoaded',function(){
+            'use strict';
+            const deleteButtons = document.getElementsByClassName("btn-delete");
+
+            for (const btn of deleteButtons) {
+                btn.addEventListener('click',function (){
+                    const ans = confirm("삭제하시겠습니까?");
+                    if(ans) {
+                        const deleteForm = document.getElementById("deleteForm");
+                        deleteForm.submit();
+                    }
+                });
+            }
+        });
+    </script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            text-align: center;
+            padding: 8px;
+        }
+        th {
+            background-color: #787878;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #dcdcdc;
+        }
+    </style>
 </head>
 <body>
-  <h1> Hello World! </h1>
+    <table>
+        <thead>
+            <th>주민일련번호</th>
+            <th>이름</th>
+            <th>가족관계증명서</th>
+            <th>주민등록등본</th>
+            <th>출생신고서</th>
+            <th>사망신고서</th>
+            <th>증명서발급목록</th>
+        </thead>
+        <tbody>
+            <tr th:each="resident : ${residentList}">
+                <td th:text="${resident.residentSerialNumber}"/>
+                <td th:text="${resident.name}"/>
+                <td><a th:href="@{#}">가족관계증명서링크</a></td>
+                <td><a th:href="@{#}">주민등록등본링크</a></td>
+                <td><a th:if="${true}" th:href="@{#}" th:text="출생신고서"></a></td>
+                <td><a th:if="${true}" th:href="@{#}" th:text="사망신고서"></a></td>
+                <td><a th:href="@{|/resident/certifications/${resident.residentSerialNumber}|}">증명서발급목록링크</a></td>
+                <td><button class="btn-delete">삭제</button></td>
+            </tr>
+        </tbody>
+    </table>
+  <a th:href="@{/(page=${pageable.previousOrFirst().getPageNumber()})}">prev</a>
+  <a th:href="@{/(page=${pageable.next().getPageNumber()})}">next</a>
 </body>
 </html>

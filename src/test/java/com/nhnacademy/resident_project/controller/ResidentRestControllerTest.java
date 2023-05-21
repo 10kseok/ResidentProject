@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSources;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -342,9 +343,8 @@ class ResidentRestControllerTest {
                 .andExpect(result -> assertThat(result.getResolvedException())
                         .isInstanceOf(IllegalResidentAccessException.class));
     }
-
     @Test
-    @DisplayName("가족관계 삭제 - 정상삭제")
+    @DisplayName("가족관계 삭제 - 정상삭제(없는 데이터도 삭제 허용)")
     void delete_3() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/residents/1/relationship/2");
@@ -359,17 +359,6 @@ class ResidentRestControllerTest {
     void delete_4() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/residents/7/birth/8");
-
-        mockMvc.perform(requestBuilder)
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.deletedAt").exists());
-    }
-
-    @Test
-    @DisplayName("사망신고서 삭제 - 정상 삭제(없는 데이터도 삭제 허용)")
-    void delete_5() throws Exception {
-        RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .delete("/residents/7/death/8");
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk())

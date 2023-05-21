@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>증명서 발급 목록</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            text-align: center;
+            padding: 8px;
+        }
+        th {
+            background-color: #787878;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #dcdcdc;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <th>증명서확인번호</th>
+            <th>증명서유형코드</th>
+            <th>증명서발급일자</th>
+        </thead>
+        <tbody>
+            <tr th:each="certification : ${certificationList}">
+                <td th:text="${certification.certificateConfirmationNumber}"/>
+                <td th:text="${certification.certificateTypeCode}"/>
+                <td th:text="${certification.certificateIssueDate}"/><td></td>
+            </tr>
+        </tbody>
+    </table>
+    <a th:href="@{|./${residentSerialNumber}?page=${pageable.previousOrFirst().getPageNumber()}|}">prev</a>
+    <a th:href="@{|./${residentSerialNumber}?page=${pageable.next().getPageNumber()}|}">next</a>
+    <a href="/">home</a>
+</body>
+</html>
