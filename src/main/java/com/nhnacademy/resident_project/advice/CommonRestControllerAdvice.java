@@ -42,13 +42,6 @@ public class CommonRestControllerAdvice {
         return new ResponseEntity<>(errorMessage, HttpStatus.UNAUTHORIZED);
     }
 
-    //403  Forbidden
-//    @ExceptionHandler()
-//    public ResponseEntity<ErrorMessage> invalidEventOwner(Exception exception){
-//        ErrorMessage errorMessage = new ErrorMessage(HttpStatus.FORBIDDEN.value(), exception.getMessage());
-//        return new ResponseEntity<>(errorMessage,HttpStatus.FORBIDDEN);
-//    }
-
     //404 Not Found
     @ExceptionHandler({ResidentNotFoundException.class, NoHandlerFoundException.class,
             })

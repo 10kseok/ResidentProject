@@ -3,6 +3,7 @@ package com.nhnacademy.resident_project.repository;
 
 import com.nhnacademy.resident_project.RepositoryIntegrationTest;
 import com.nhnacademy.resident_project.entity.Resident;
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ class ResidentRepositoryTest {
     void not_found() {
         Optional<Resident> resident = residentRepository.findById(10);
 
-        assertThatThrownBy(() -> resident.get())
+        assertThatThrownBy(resident::get)
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessageContaining("No value present");
     }
@@ -42,7 +43,8 @@ class ResidentRepositoryTest {
         resident.setResidentSerialNumber(8);
         resident.setName("나테스");
 
-        assertThatThrownBy(() -> residentRepository.saveAndFlush(resident));
+        assertThatThrownBy(() -> residentRepository.saveAndFlush(resident))
+                .hasCauseInstanceOf(ConstraintViolationException.class);
     }
 
     @Test

@@ -8,6 +8,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaSystemException;
 
 @RepositoryIntegrationTest
 class FamilyRelationshipRepositoryTest {
@@ -28,12 +29,18 @@ class FamilyRelationshipRepositoryTest {
         familyRelationshipRepository.findAll()
                 .stream()
                 .map(FamilyRelationship::getFamilyResident)
-                .forEach(System.out::println);
+                .forEach(resident -> {
+                    System.out.println(resident);
+                    Assertions.assertThat(resident).isNotNull();
+                });
 
         familyRelationshipRepository.findAll()
                 .stream()
                 .map(FamilyRelationship::getBaseResident)
-                .forEach(System.out::println);
+                .forEach(resident -> {
+                    System.out.println(resident);
+                    Assertions.assertThat(resident).isNotNull();
+                });
     }
 
     @Test
@@ -41,7 +48,6 @@ class FamilyRelationshipRepositoryTest {
     void find_resident2() {
         FamilyRelationshipRequest req = new FamilyRelationshipRequest(1, 2, "부");
         FamilyRelationship fr = req.toEntity();
-//        familyRelationshipRepository.saveAndFlush(fr);
 
         System.out.println(fr.getBaseResident());
         System.out.println(fr.getFamilyResident());
@@ -49,6 +55,9 @@ class FamilyRelationshipRepositoryTest {
         FamilyRelationship fr2 = familyRelationshipRepository.findById(fr.getPk()).get();
         System.out.println(fr2.getBaseResident());
         System.out.println(fr2.getFamilyResident());
+
+        Assertions.assertThat(fr2.getBaseResident()).isNotNull();
+        Assertions.assertThat(fr2.getFamilyResident()).isNotNull();
     }
 
     @Test
@@ -104,6 +113,7 @@ class FamilyRelationshipRepositoryTest {
         fr.setFamilyRelationshipCode("child");
 
         // JpaSystemException: attempted to assign id from null one-to-one property
-        Assertions.assertThatThrownBy(() -> familyRelationshipRepository.saveAndFlush(fr));
+        Assertions.assertThatThrownBy(() -> familyRelationshipRepository.saveAndFlush(fr))
+                .isInstanceOf(JpaSystemException.class);
     }
 }
