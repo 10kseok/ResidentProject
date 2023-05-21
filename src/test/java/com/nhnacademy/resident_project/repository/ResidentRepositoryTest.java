@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.NoSuchElementException;
@@ -80,5 +81,50 @@ class ResidentRepositoryTest {
         Page<Resident> result = residentRepository.getResidentsBy(pageable);
 
         assertThat(result.getNumberOfElements()).isPositive();
+    }
+
+    @Test
+    @DisplayName("증명서발급 조회")
+    void find_certificate_issue() {
+        residentRepository.findCertificateByResidentId(4)
+                .forEach(System.out::println);
+    }
+
+    @Test
+    @DisplayName("증명서발급 삽입")
+    void insert_certificate_issue() {
+        residentRepository.insertCertificate(8876543210987654L, 4, "출생신고서", LocalDate.now());
+
+        residentRepository.findCertificateByResidentId(4)
+                .forEach(System.out::println);
+    }
+
+    @Test
+    @DisplayName("출생사망신고서 삽입")
+    void insert_birth_death_report_resident() {
+        residentRepository.insertBirthDeathReport("출생", 7, 5, LocalDate.of(2023,3, 17), "부", null, "nam@nhnad.co.kr", "010-1234-5678");
+        residentRepository.insertBirthDeathReport("사망", 7, 5, LocalDate.of(2023,3, 17), null, "비동거친족", "nam@nhnad.co.kr", "010-1234-5678");
+
+
+        assertThat(residentRepository.findBirthDeathReport("출생", 7, 5)).isPresent();
+        assertThat(residentRepository.findBirthDeathReport("사망", 7, 5)).isPresent();
+    }
+
+    @Test
+    @DisplayName("출생사망신고서 수정 - 신고날짜 변경")
+    void update_birth_death_report_resident() {
+        residentRepository.updateBirthDeathReport("출생", 7, 4, LocalDate.of(2023,3, 30), "부", null, "nam@nhnad.co.kr", "010-1234-5678");
+
+        assertThat(residentRepository.findBirthDeathReport("출생", 7, 4).get().getBirthDeathReportDate())
+                .isEqualTo(LocalDate.of(2023, 3, 30));
+    }
+
+    @Test
+    @DisplayName("출생사망신고서 삭제")
+    void delete_birth_death_report_resident() {
+        residentRepository.deleteBirthDeathReport("출생", 7, 4);
+
+        assertThat(residentRepository.findBirthDeathReport("출생", 7, 4))
+                .isEmpty();
     }
 }

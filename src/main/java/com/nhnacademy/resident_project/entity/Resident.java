@@ -44,6 +44,8 @@ public class Resident {
     private List<FamilyRelationship> baseRelationships = new ArrayList<>();
     @OneToMany(mappedBy = "familyResident", cascade = CascadeType.REMOVE)
     private List<FamilyRelationship> familyRelationships = new ArrayList<>();
+    @OneToMany(mappedBy = "issuedResident", cascade = CascadeType.REMOVE)
+    private List<CertificateIssue> certificateIssues = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

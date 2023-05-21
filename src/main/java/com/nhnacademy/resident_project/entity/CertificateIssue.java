@@ -16,9 +16,19 @@ public class CertificateIssue {
     private Long certificateConfirmationNumber;
     @ManyToOne
     @JoinColumn(name = "resident_serial_number", nullable = false)
-    private Resident residentSerialNumber;
+    private Resident issuedResident;
     @Column(name = "certificate_type_code", nullable = false)
     private String certificateTypeCode;
     @Column(name = "certificate_issue_date", nullable = false)
     private LocalDate certificateIssueDate;
+
+    @Override
+    public String toString() {
+        return "CertificateIssue{" +
+                "certificateConfirmationNumber=" + certificateConfirmationNumber +
+                ", issuedResident=" + issuedResident +
+                ", certificateTypeCode='" + certificateTypeCode + '\'' +
+                ", certificateIssueDate=" + certificateIssueDate +
+                '}';
+    }
 }

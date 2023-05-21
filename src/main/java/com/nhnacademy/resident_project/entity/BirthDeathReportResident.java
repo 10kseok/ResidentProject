@@ -11,14 +11,14 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Table(name = "birth_death_report_resident")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class BirthDeathReportResident {
     @EmbeddedId
     private PK pk;
 
     @ManyToOne
     @MapsId("reportResidentSerialNumber")
-    @JoinColumn(name = "report_resident_serial_number")
+    @JoinColumn(name = "report_resident_serial_number", nullable = false)
     private Resident reportResident;
 
     @Column(name = "birth_death_report_date", nullable = false)

@@ -1,0 +1,61 @@
+### 출생 신고 API
+POST /residents/7/birth HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "typeCode" : "출생",
+  "residentSerialNumber" : 8,
+  "reportResidentSerialNumber" : 7,
+  "birthDeathReportDate" : "2023-05-21",
+  "birthReportQualificationsCode" : "자식",
+  "phoneNumber" : "01012345678"
+}
+
+###
+
+PUT /residents/7/birth/8 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "typeCode" : "출생",
+  "residentSerialNumber" : 8,
+  "reportResidentSerialNumber" : 7,
+  "birthDeathReportDate" : "2023-04-21",
+  "birthReportQualificationsCode" : "자식",
+  "phoneNumber" : "01012345678"
+}
+
+###
+
+DELETE /residents/8/birth/7 HTTP/1.1
+Host: localhost:8080
+
+### 사망 신고 API
+POST /residents/7/death HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "typeCode" : "사망",
+  "residentSerialNumber" : 8,
+  "reportResidentSerialNumber" : 7,
+  "birthDeathReportDate" : "2023-04-21",
+  "deathReportQualificationsCode" : "비동거친족",
+  "phoneNumber" : "01012345678"
+}
+###
+
+PUT /residents/7/death/8 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "relationship" : "child"
+}
+
+###
+
+DELETE /residents/7/death/8 HTTP/1.1
+Host: localhost:8080
