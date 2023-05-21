@@ -4,6 +4,7 @@ import com.nhnacademy.resident_project.repository.RepositoryBase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -17,6 +18,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
+@EnableSpringDataWebSupport
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackageClasses = RepositoryBase.class)
 public class JpaConfig {
