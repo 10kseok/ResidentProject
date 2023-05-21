@@ -1,7 +1,6 @@
 package com.nhnacademy.resident_project.domain.request;
 
 import com.nhnacademy.resident_project.domain.ReportSuccessDTO;
-import com.nhnacademy.resident_project.entity.BirthDeathReportResident;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -16,9 +15,7 @@ import java.time.LocalDate;
 public class BirthDeathReportRequest implements Serializable, ReportSuccessDTO {
     @NotNull
     private String typeCode;
-    @NotNull
     private int residentSerialNumber;
-    @NotNull
     private int reportResidentSerialNumber;
     @NotNull
     private LocalDate birthDeathReportDate;

@@ -1,11 +1,10 @@
 package com.nhnacademy.resident_project.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.resident_project.advice.CommonRestControllerAdvice;
+import com.nhnacademy.resident_project.domain.request.BirthDeathReportRequest;
 import com.nhnacademy.resident_project.domain.request.FamilyRelationshipRequest;
 import com.nhnacademy.resident_project.domain.request.ResidentRequest;
 import com.nhnacademy.resident_project.exception.IllegalResidentAccessException;
-import com.nhnacademy.resident_project.exception.MissingParameterException;
 import com.nhnacademy.resident_project.exception.NoSuchRelationshipException;
 import com.nhnacademy.resident_project.exception.ValidationFailedException;
 import com.nhnacademy.resident_project.service.ResidentService;
@@ -20,6 +19,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static com.nhnacademy.resident_project.config.WebTestConfig.mappingJackson2HttpMessageConverter;
@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -153,6 +154,50 @@ class ResidentRestControllerTest {
     }
 
     @Test
+    @DisplayName("출생사망신고서 등록 - 필수조건 미충족")
+    void register_7() throws Exception {
+        BirthDeathReportRequest req = new BirthDeathReportRequest();
+        req.setTypeCode("출생");
+        req.setResidentSerialNumber(8);
+        req.setBirthDeathReportDate(LocalDate.now());
+        req.setBirthReportQualificationsCode("부");
+
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/residents/7/birth")
+                .content(objectMapper().writeValueAsString(req))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertThat(result.getResolvedException())
+                        .isInstanceOfAny(ValidationFailedException.class));
+    }
+
+    @Test
+    @DisplayName("출생사망신고서 등록 - 정상 등록")
+    void register_8() throws Exception {
+        BirthDeathReportRequest req = new BirthDeathReportRequest();
+        req.setTypeCode("출생");
+        req.setResidentSerialNumber(8);
+        req.setBirthDeathReportDate(LocalDate.now());
+        req.setBirthReportQualificationsCode("부");
+        req.setPhoneNumber("01012345678");
+
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/residents/7/birth")
+                .content(objectMapper().writeValueAsString(req))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.typeCode").value("출생"))
+                .andExpect(jsonPath("$.residentSerialNumber").value(8))
+                .andExpect(jsonPath("$.reportResidentSerialNumber").value(7));
+    }
+
+    @Test
     @DisplayName("주민 정보 업데이트 - 필수조건 미충족")
     void update_1() throws Exception {
         ResidentRequest residentRequest = new ResidentRequest();
@@ -234,6 +279,47 @@ class ResidentRestControllerTest {
     }
 
     @Test
+    @DisplayName("출생사망신고서 수정 - 필수조건 미충족")
+    void update_5() throws Exception {
+        BirthDeathReportRequest req = new BirthDeathReportRequest();
+        req.setTypeCode("출생");
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .put("/residents/7/birth/8")
+                .content(objectMapper().writeValueAsString(req))
+                .contentType(MediaType.APPLICATION_JSON);
+
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertThat(result.getResolvedException())
+                        .isInstanceOf(ValidationFailedException.class));
+    }
+
+    @Test
+    @DisplayName("출생사망신고서 수정 - 정상 수정")
+    void update_6() throws Exception {
+        BirthDeathReportRequest req = new BirthDeathReportRequest();
+        req.setTypeCode("출생");
+        req.setResidentSerialNumber(8);
+        req.setBirthDeathReportDate(LocalDate.now());
+        req.setBirthReportQualificationsCode("부");
+        req.setPhoneNumber("01087654321");
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .put("/residents/7/birth/8")
+                .content(objectMapper().writeValueAsString(req))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.typeCode").value("출생"))
+                .andExpect(jsonPath("$.residentSerialNumber").value(8))
+                .andExpect(jsonPath("$.reportResidentSerialNumber").value(7))
+                .andDo(print());
+    }
+
+    @Test
     @DisplayName("가족관계 삭제 - 유효하지 않은 일련번호1")
     void delete_1() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -269,26 +355,24 @@ class ResidentRestControllerTest {
     }
 
     @Test
-    void registerBirth() {
+    @DisplayName("출생신고서 삭제 - 정상 삭제(없는 데이터도 삭제 허용)")
+    void delete_4() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .delete("/residents/7/birth/8");
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.deletedAt").exists());
     }
 
     @Test
-    void updateBirthReport() {
-    }
+    @DisplayName("사망신고서 삭제 - 정상 삭제(없는 데이터도 삭제 허용)")
+    void delete_5() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .delete("/residents/7/death/8");
 
-    @Test
-    void deleteBirthReport() {
-    }
-
-    @Test
-    void registerDeath() {
-    }
-
-    @Test
-    void updateDeathReport() {
-    }
-
-    @Test
-    void deleteDeathReport() {
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.deletedAt").exists());
     }
 }

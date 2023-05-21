@@ -78,19 +78,15 @@ public class ResidentService {
         return true;
     }
 
-    // 출생 신고
     @Transactional
     public boolean save(BirthDeathReportRequest request) {
-        // validation
         if (!request.getTypeCode().equals("출생") && !request.getTypeCode().equals("사망")) {
             throw new InvalidTypeCodeException(request.getTypeCode());
         }
-
         if (!residentRepository.existsById(request.getReportResidentSerialNumber())) {
             throw new ResidentNotFoundException(request.getReportResidentSerialNumber());
         }
-        // save
-        // TODO: 출생신고서 생성
+
         residentRepository.insertBirthDeathReport(request.getTypeCode(),
                 request.getResidentSerialNumber(),
                 request.getReportResidentSerialNumber(),
@@ -99,7 +95,6 @@ public class ResidentService {
                 request.getDeathReportQualificationsCode(),
                 request.getEmailAddress(),
                 request.getPhoneNumber());
-
         // 증명서 이력 생성
         residentRepository.insertCertificate(RandomLongGenerator.nextLong(16),
                 request.getResidentSerialNumber(),
@@ -110,27 +105,35 @@ public class ResidentService {
     }
 
     @Transactional
-    public boolean update(CertificateIssueRequest request) {
-        // validation
-
-
+    public boolean update(BirthDeathReportRequest request) {
+        if (!request.getTypeCode().equals("출생") && !request.getTypeCode().equals("사망")) {
+            throw new InvalidTypeCodeException(request.getTypeCode());
+        }
+        if (!residentRepository.existsById(request.getReportResidentSerialNumber())) {
+            throw new ResidentNotFoundException(request.getReportResidentSerialNumber());
+        }
         // update
-        // TODO : 출생신고서 생성
-
+        residentRepository.updateBirthDeathReport(request.getTypeCode(),
+                request.getResidentSerialNumber(),
+                request.getReportResidentSerialNumber(),
+                request.getBirthDeathReportDate(),
+                request.getBirthReportQualificationsCode(),
+                request.getDeathReportQualificationsCode(),
+                request.getEmailAddress(),
+                request.getPhoneNumber());
         return true;
     }
 
-    public boolean delete(CertificateIssueRequest request) {
+    @Transactional
+    public boolean delete(BirthDeathReportRequest request) {
         // validation
-
-
+        if (!request.getTypeCode().equals("출생") && !request.getTypeCode().equals("사망")) {
+            throw new InvalidTypeCodeException(request.getTypeCode());
+        }
         // delete
-        // TODO : 출생신고서만 삭제 (증명서 발급이력 삭제 x)
-//        residentRepository.deleteCertificate(request.getId(),
-//                request.getResidentNumber(),
-//                request.getTypeCode(),
-//                request.getIssueDate()
-//        );
+        residentRepository.deleteBirthDeathReport(request.getTypeCode(),
+                request.getResidentSerialNumber(),
+                request.getReportResidentSerialNumber());
         return true;
     }
 }

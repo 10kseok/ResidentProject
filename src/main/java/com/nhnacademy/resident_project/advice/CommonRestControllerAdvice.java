@@ -29,7 +29,7 @@ public class CommonRestControllerAdvice {
     @ExceptionHandler({MissingServletRequestParameterException.class, MethodArgumentNotValidException.class,
             ValidationFailedException.class, DuplicateSerialNumberException.class,
             MissingParameterException.class, NoSuchRelationshipException.class,
-            NoSuchElementException.class})
+            NoSuchElementException.class, InvalidTypeCodeException.class})
     public ResponseEntity<ErrorMessage> mismatchParameter(Exception exception) {
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);

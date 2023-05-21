@@ -1,6 +1,5 @@
 package com.nhnacademy.resident_project.repository;
 
-import com.nhnacademy.resident_project.domain.FamilyRelationShips;
 import com.nhnacademy.resident_project.entity.BirthDeathReportResident;
 import com.nhnacademy.resident_project.entity.CertificateIssue;
 import com.nhnacademy.resident_project.entity.Resident;
@@ -22,13 +21,13 @@ public interface ResidentRepository extends JpaRepository<Resident, Integer> {
 
     @Modifying
     @Query(value = "INSERT INTO certificate_issue VALUES (?1, ?2, ?3, ?4) ", nativeQuery = true)
-    void insertCertificate(Long id, int residentNumber, String type_code, LocalDate issuedDate);
+    void insertCertificate(Long id, int residentNumber, String typeCode, LocalDate issuedDate);
 
     @Modifying
     @Query(value = "UPDATE certificate_issue " +
             "SET certificate_type_code = ?2, certificate_issue_date = ?3 " +
             "WHERE certificate_confirmation_number = ?1 ", nativeQuery = true)
-    void updateCertificate(Long id, String type_code, LocalDate issuedDate);
+    void updateCertificate(Long id, String typeCode, LocalDate issuedDate);
 
     @Modifying
     @Query(value = "INSERT INTO birth_death_report_resident VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8) ", nativeQuery = true)

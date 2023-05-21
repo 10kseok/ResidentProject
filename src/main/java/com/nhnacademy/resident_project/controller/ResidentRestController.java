@@ -2,12 +2,12 @@ package com.nhnacademy.resident_project.controller;
 
 import com.nhnacademy.resident_project.domain.Relationship;
 import com.nhnacademy.resident_project.domain.ReportSuccessDTO;
+import com.nhnacademy.resident_project.domain.ReportSuccessDTOImpl;
 import com.nhnacademy.resident_project.domain.request.BirthDeathReportRequest;
 import com.nhnacademy.resident_project.domain.request.FamilyRelationshipRequest;
 import com.nhnacademy.resident_project.domain.request.ResidentRequest;
 import com.nhnacademy.resident_project.entity.Resident;
 import com.nhnacademy.resident_project.exception.IllegalResidentAccessException;
-import com.nhnacademy.resident_project.exception.InvalidTypeCodeException;
 import com.nhnacademy.resident_project.exception.NoSuchRelationshipException;
 import com.nhnacademy.resident_project.exception.ValidationFailedException;
 import com.nhnacademy.resident_project.service.ResidentService;
@@ -84,8 +84,8 @@ public class ResidentRestController {
     @PutMapping("/{serialNumber}/relationship/{familySerialNumber}")
     @ResponseStatus(HttpStatus.OK)
     public Map<String, LocalDateTime> update(@PathVariable("serialNumber") Integer baseSerialNumber,
-                                       @PathVariable Integer familySerialNumber,
-                                       @Valid @RequestBody FamilyRelationshipRequest request,
+                                             @PathVariable Integer familySerialNumber,
+                                             @Valid @RequestBody FamilyRelationshipRequest request,
                                              BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors() || baseSerialNumber <= 0
@@ -121,40 +121,53 @@ public class ResidentRestController {
     @PostMapping({"/{serialNumber}/birth", "/{serialNumber}/death"})
     @ResponseStatus(HttpStatus.CREATED)
     public ReportSuccessDTO registerBirth(@PathVariable Integer serialNumber,
-                                                @Valid @RequestBody BirthDeathReportRequest request,
-                                                BindingResult bindingResult) {
-        // validation
+                                          @Valid @RequestBody BirthDeathReportRequest request,
+                                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValidationFailedException(bindingResult);
         }
-
-        // post
+        request.setReportResidentSerialNumber(serialNumber);
         residentService.save(request);
-        // residentService.save(resident);
-        return request;
+        return new ReportSuccessDTOImpl().getFrom(request);
     }
 
     @PutMapping({"/{serialNumber}/birth/{targetSerialNumber}", "/{serialNumber}/death/{targetSerialNumber}"})
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Void> updateBirthReport(@PathVariable Integer serialNumber,
-                                           @PathVariable Integer targetSerialNumber) {
-        // validation
-
-        // update
-        // residentService.update(resident);
-        return ResponseEntity.ok()
-                .build();
+    public ReportSuccessDTO updateBirthReport(@PathVariable Integer serialNumber,
+                                                  @PathVariable Integer targetSerialNumber,
+                                                  @Valid @RequestBody BirthDeathReportRequest request,
+                                                  BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new ValidationFailedException(bindingResult);
+        }
+        request.setResidentSerialNumber(targetSerialNumber);
+        request.setReportResidentSerialNumber(serialNumber);
+        residentService.update(request);
+        return new ReportSuccessDTOImpl().getFrom(request);
     }
 
-    @DeleteMapping({"/{serialNumber}/birth/{targetSerialNumber}", "/{serialNumber}/death/{targetSerialNumber}"})
-    public ResponseEntity<Void> deleteBirthReport(@PathVariable Integer serialNumber,
-                                           @PathVariable Integer targetSerialNumber) {
-        // validation
+    @DeleteMapping("/{serialNumber}/birth/{targetSerialNumber}")
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, LocalDateTime> deleteBirthReport(@PathVariable Integer serialNumber,
+                                                  @PathVariable Integer targetSerialNumber) {
+        BirthDeathReportRequest request = new BirthDeathReportRequest();
+        request.setResidentSerialNumber(targetSerialNumber);
+        request.setReportResidentSerialNumber(serialNumber);
+        request.setTypeCode("출생");
+        residentService.delete(request);
+        return Map.of("deletedAt", LocalDateTime.now());
+    }
 
-        // delete
-        // residentService.delete(resident);
-        return ResponseEntity.ok()
-                .build();
+    @DeleteMapping("/{serialNumber}/death/{targetSerialNumber}")
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, LocalDateTime> deleteDeathReport(@PathVariable Integer serialNumber,
+                                                        @PathVariable Integer targetSerialNumber) {
+        BirthDeathReportRequest request = new BirthDeathReportRequest();
+        request.setResidentSerialNumber(targetSerialNumber);
+        request.setReportResidentSerialNumber(serialNumber);
+        request.setTypeCode("사망");
+        residentService.delete(request);
+        return Map.of("deletedAt", LocalDateTime.now());
     }
 
 
