@@ -14,7 +14,7 @@ public class HouseholdMovementAddress {
     @EmbeddedId
     private PK pk;
     @MapsId("householdSerialNumber")
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "household_serial_number")
     private Household household;
     @Column(name = "house_movement_address", nullable = false)

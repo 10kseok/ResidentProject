@@ -1,0 +1,26 @@
+### 세대 전입 주소 등록
+POST /household/3/movement HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "reportDate": "2023-05-21",
+  "houseMovementAddress": "광주광역시 지산동",
+  "lastAddressYN": "Y"
+}
+
+### 세대 전입 주소 수정
+PUT /household/3/movement/20230521 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "houseMovementAddress": "광주광역시 지산동",
+  "lastAddressYN": "N"
+}
+
+### 세대 전입 삭제
+DELETE /household/3/movement/20230521 HTTP/1.1
+Host: localhost:8080
+
+

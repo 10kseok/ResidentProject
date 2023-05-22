@@ -12,7 +12,6 @@ class RelationshipTest {
         Assertions.assertThat(Relationship.matches("child")).isTrue();
         Assertions.assertThat(Relationship.matches("Child")).isTrue();
         Assertions.assertThat(Relationship.matches("CHILD")).isTrue();
-
         Assertions.assertThat(Relationship.matches("삼촌")).isFalse();
     }
 }

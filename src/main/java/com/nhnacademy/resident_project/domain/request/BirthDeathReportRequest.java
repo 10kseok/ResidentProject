@@ -1,6 +1,6 @@
 package com.nhnacademy.resident_project.domain.request;
 
-import com.nhnacademy.resident_project.domain.ReportSuccessDTO;
+import com.nhnacademy.resident_project.domain.reponse.ReportSuccessDTO;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;

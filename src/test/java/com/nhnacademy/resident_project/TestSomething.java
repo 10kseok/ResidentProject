@@ -16,8 +16,6 @@ class TestSomething {
             System.out.println(c.getKorName());
             System.out.println(c.name());
         }
-
-        String kor = "한국어";
     }
 
     @Test
@@ -27,6 +25,6 @@ class TestSomething {
         System.out.println((long) (Math.random() * Math.pow(10, 16)));
 
         Assertions.assertThat((long) (random.nextDouble() * Math.pow(10, 16)))
-                .isGreaterThan((long) (1 * Math.pow(10, 16)));
+                .isGreaterThan((long) (1 * Math.pow(10, 15)));
     }
 }

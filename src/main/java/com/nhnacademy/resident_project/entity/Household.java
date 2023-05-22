@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @Table(name = "household")
 public class Household {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "household_serial_number", nullable = false)
     private int householdSerialNumber;
     @ManyToOne
@@ -24,5 +26,8 @@ public class Household {
     private String householdCompositionReasonCode;
     @Column(name = "current_house_movement_address", nullable = false)
     private String currentHouseMovementAddress;
+
+    @OneToMany(mappedBy = "household", cascade = CascadeType.PERSIST)
+    List<HouseholdMovementAddress> addressList;
 }
 

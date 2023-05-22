@@ -1,7 +1,6 @@
 package com.nhnacademy.resident_project.service;
 
 import com.nhnacademy.resident_project.domain.request.BirthDeathReportRequest;
-import com.nhnacademy.resident_project.domain.request.BirthDeathReportRequest.BirthDeathReportRequestBuilder;
 import com.nhnacademy.resident_project.domain.request.FamilyRelationshipRequest;
 import com.nhnacademy.resident_project.domain.request.ResidentRequest;
 import com.nhnacademy.resident_project.entity.Resident;
@@ -22,7 +21,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -136,7 +136,7 @@ class ResidentServiceTest {
     @DisplayName("출생사망신고서 등록(수정) - 존재하지않는 주민일련번호가 출생신고")
     void save_6() {
         // given
-        BirthDeathReportRequest request = new BirthDeathReportRequest();
+        BirthDeathReportRequest request = new BirthDeathReportRequest ();
         request.setTypeCode("사망");
         request.setResidentSerialNumber(1);
         request.setReportResidentSerialNumber(999);

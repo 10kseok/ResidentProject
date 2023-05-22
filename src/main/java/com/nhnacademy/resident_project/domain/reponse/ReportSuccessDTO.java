@@ -1,4 +1,4 @@
-package com.nhnacademy.resident_project.domain;
+package com.nhnacademy.resident_project.domain.reponse;
 
 public interface ReportSuccessDTO {
     String getTypeCode();

@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `family_relationship` (
 -- Table `household`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `household` (
-                                           `household_serial_number` INT NOT NULL,
+                                           `household_serial_number` IDENTITY INT NOT NULL,
                                            `household_resident_serial_number` INT NOT NULL,
                                            `household_composition_date` DATE NOT NULL,
                                            `household_composition_reason_code` VARCHAR(20) NOT NULL,

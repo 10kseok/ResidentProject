@@ -1,0 +1,16 @@
+### 세대 등록
+POST /household HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "householdSerialNumber": 2,
+  "residentSerialNumber": 7,
+  "compositionDate": "2023-05-21",
+  "compositionReasonCode": "세대분리",
+  "currentHouseMovementAddress": "경상남도 진주시 영천강로"
+}
+
+### 세대 삭제
+DELETE /household/2 HTTP/1.1
+Host: localhost:8080

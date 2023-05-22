@@ -1,8 +1,8 @@
 package com.nhnacademy.resident_project.controller;
 
 import com.nhnacademy.resident_project.domain.Relationship;
-import com.nhnacademy.resident_project.domain.ReportSuccessDTO;
-import com.nhnacademy.resident_project.domain.ReportSuccessDTOImpl;
+import com.nhnacademy.resident_project.domain.reponse.ReportSuccessDTO;
+import com.nhnacademy.resident_project.domain.reponse.ReportSuccessDTOImpl;
 import com.nhnacademy.resident_project.domain.request.BirthDeathReportRequest;
 import com.nhnacademy.resident_project.domain.request.FamilyRelationshipRequest;
 import com.nhnacademy.resident_project.domain.request.ResidentRequest;
