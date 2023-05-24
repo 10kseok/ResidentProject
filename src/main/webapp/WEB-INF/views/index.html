@@ -38,6 +38,7 @@
     </style>
 </head>
 <body>
+<a href="/logout">logout</a>
     <table>
         <thead>
             <th>주민일련번호</th>
@@ -62,7 +63,7 @@
             </tr>
         </tbody>
     </table>
-  <a th:href="@{/(page=${pageable.previousOrFirst().getPageNumber()})}">prev</a>
-  <a th:href="@{/(page=${pageable.next().getPageNumber()})}">next</a>
+<a th:href="@{/(page=${pageable.previousOrFirst().getPageNumber()})}">prev</a>
+<a th:href="@{/(page=${pageable.next().getPageNumber()})}">next</a>
 </body>
 </html>

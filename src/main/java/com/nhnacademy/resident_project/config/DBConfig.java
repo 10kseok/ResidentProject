@@ -35,6 +35,5 @@ public class DBConfig {
         dataSource.setTestWhileIdle(Boolean.parseBoolean(env.getProperty("db.testWhileIdle")));
 
         return dataSource;
-        // 나는 추만석 너무 잘생겼어
     }
 }

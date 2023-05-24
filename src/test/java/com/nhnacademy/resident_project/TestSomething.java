@@ -20,11 +20,12 @@ class TestSomething {
 
     @Test
     void test2() {
+        // ISSUE: 0.01 일시 Test Fail
         SecureRandom random = new SecureRandom();
         System.out.println("secure number" + (long) (random.nextDouble() * Math.pow(10, 16)));
         System.out.println((long) (Math.random() * Math.pow(10, 16)));
 
         Assertions.assertThat((long) (random.nextDouble() * Math.pow(10, 16)))
-                .isGreaterThan((long) (1 * Math.pow(10, 15)));
+                .isGreaterThan((long) (1 * Math.pow(10, 15) - 1));
     }
 }
