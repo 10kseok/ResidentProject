@@ -1,4 +1,4 @@
-package com.nhnacademy.resident_project;
+package com.nhnacademy.resident_project.initializer;
 
 import com.nhnacademy.resident_project.config.RootConfig;
 import com.nhnacademy.resident_project.config.WebConfig;

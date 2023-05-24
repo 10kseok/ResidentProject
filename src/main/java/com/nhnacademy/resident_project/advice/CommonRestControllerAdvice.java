@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.DateTimeException;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -29,7 +30,8 @@ public class CommonRestControllerAdvice {
     @ExceptionHandler({MissingServletRequestParameterException.class, MethodArgumentNotValidException.class,
             ValidationFailedException.class, DuplicateSerialNumberException.class,
             MissingParameterException.class, NoSuchRelationshipException.class,
-            NoSuchElementException.class, InvalidTypeCodeException.class})
+            NoSuchElementException.class, InvalidTypeCodeException.class,
+            DateTimeException.class})
     public ResponseEntity<ErrorMessage> mismatchParameter(Exception exception) {
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);

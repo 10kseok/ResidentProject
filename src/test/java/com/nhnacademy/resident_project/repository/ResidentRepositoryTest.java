@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -79,9 +80,9 @@ class ResidentRepositoryTest {
     @Test
     @DisplayName("페이징 조회")
     void pagination() {
-        Pageable pageable = PageRequest.of(0, 20);
+        Pageable pageable = PageRequest.of(0, 20, Sort.Direction.ASC, "residentSerialNumber");
         Page<Resident> result = residentRepository.getResidentsBy(pageable);
-
+        result.forEach((r) -> System.out.println(r.getResidentSerialNumber()));
         assertThat(result.getNumberOfElements()).isPositive();
     }
 

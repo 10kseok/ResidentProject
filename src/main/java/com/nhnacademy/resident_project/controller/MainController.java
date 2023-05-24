@@ -1,5 +1,6 @@
 package com.nhnacademy.resident_project.controller;
 
+import com.nhnacademy.resident_project.entity.Resident;
 import com.nhnacademy.resident_project.service.ResidentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,7 @@ public class MainController {
     private final ResidentService residentService;
     @GetMapping({"/", ""})
     public String index(Model model,
-                        @PageableDefault(sort = "residentRegistrationNumber", direction = Sort.Direction.ASC) Pageable pageable) {
+                        @PageableDefault(sort = "residentSerialNumber", direction = Sort.Direction.ASC) Pageable pageable) {
         model.addAttribute("residentList", residentService.getResidentsBy(pageable).getContent());
         model.addAttribute("pageable", pageable);
         return "index";

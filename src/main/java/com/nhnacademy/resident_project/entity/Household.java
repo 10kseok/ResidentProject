@@ -27,7 +27,7 @@ public class Household {
     @Column(name = "current_house_movement_address", nullable = false)
     private String currentHouseMovementAddress;
 
-    @OneToMany(mappedBy = "household", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "household")
     List<HouseholdMovementAddress> addressList;
 }
 

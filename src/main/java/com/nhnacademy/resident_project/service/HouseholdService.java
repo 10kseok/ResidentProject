@@ -57,4 +57,8 @@ public class HouseholdService {
                 request.getHouseholdSerialNumber());
         return request.getHouseholdSerialNumber();
     }
+
+    public boolean existBy(int houseSerialNumber) {
+        return householdRepository.existsById(houseSerialNumber);
+    }
 }
