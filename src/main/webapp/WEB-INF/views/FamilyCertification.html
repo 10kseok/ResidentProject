@@ -1,10 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+    <table>
+        <thead>
+            <th colspan="5">가족관계증명서
+                <p>
+                    발급일 : <span th:text="${#dates.format(certificate.certificateIssueDate, 'yyyy-MM-dd')}"/>
+                    증명서확인번호 : <span th:text="${certificate.certificateConfirmationNumber}"/>
+                </p>
+            </th>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="2">등록기준지(본적)</td>
+                <td colspan="3" th:text="${null}">주소</td>
+            </tr>
+            <th>구분</th><th>성명</th><th>출생연월일</th><th>주민등록번호</th><th>성별</th>
+            <tr>
+                <td th:text="본인"/>
+                <td th:text="${self.name}"/>
+                <td th:text="${self.birthDate}"/>
+                <td th:text="${self.residentSerialNumber}"/>
+                <td th:text="${self.genderCode}"/>
+            </tr>
+            <tr th:each="resident : ${residentList}">
+                <td th:text="${resident.familyRelationshipCode}"/>
+                <td th:text="${resident.name}"/>
+                <td th:text="${resident.birthDate}"/>
+                <td th:text="${resident.residentSerialNumber}"/>
+                <td th:text="${resident.genderCode}"/>
+            </tr>
+        </tbody>
+    </table>
 
 </body>
 </html>

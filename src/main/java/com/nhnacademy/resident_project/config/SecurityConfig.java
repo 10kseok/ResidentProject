@@ -64,6 +64,7 @@ public class SecurityConfig {
     @Bean
     public ClientRegistrationRepository clientRegistrationRepository() {
         return new InMemoryClientRegistrationRepository(github(), naver());
+
     }
 
     @Bean
